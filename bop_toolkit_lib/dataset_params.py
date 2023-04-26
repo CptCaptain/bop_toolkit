@@ -84,7 +84,8 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
     'itodd': list(range(1, 29)),
     'hbs': [1, 3, 4, 8, 9, 10, 12, 15, 17, 18, 19, 22, 23, 29, 32, 33],
     'hb': list(range(1, 34)),  # Full HB dataset.
-    'ycbv': list(range(1, 22)),
+    'ycbv': list(range(1, 23)),
+    # 'ycbv': list(range(1, 22)),
     'hope': list(range(1, 29)),
   }[dataset_name]
 
@@ -327,7 +328,8 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       }[split]
 
     p['im_size'] = {
-      'pbr': (640, 480),
+      # 'pbr': (640, 480),
+      'pbr': (512, 512),
       'primesense': (640, 480),
       'kinect': (1920, 1080)
     }[split_type]
@@ -352,7 +354,8 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
     elif split == 'test':
       p['scene_ids'] = list(range(48, 60))
 
-    p['im_size'] = (640, 480)
+    # p['im_size'] = (640, 480)
+    p['im_size'] = (512, 512)
 
     if split == 'test':
       p['depth_range'] = (612.92, 1243.59)
@@ -378,10 +381,13 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
 
   base_path = join(datasets_path, dataset_name)
   split_path = join(base_path, split)
+  # split_path += '/train'
   if split_type is not None:
     if split_type == 'pbr':
       p['scene_ids'] = list(range(50))
     split_path += '_' + split_type
+
+  # split_path += '/train_pbr/'
 
   p.update({
     # Path to the split directory.
@@ -436,6 +442,9 @@ def get_present_scene_ids(dp_split):
   """
   scene_dirs = [d for d in glob.glob(os.path.join(dp_split['split_path'], '*'))
                 if os.path.isdir(d)]
+  print(f"{dp_split=}")
+  print(f"{scene_dirs=}")
   scene_ids = [int(os.path.basename(scene_dir)) for scene_dir in scene_dirs]
   scene_ids = sorted(scene_ids)
+  print(f"{scene_ids=}")
   return scene_ids
