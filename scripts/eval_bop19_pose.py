@@ -68,7 +68,8 @@ p = {
   # description of the format. Example results can be found at:
   # https://bop.felk.cvut.cz/media/data/bop_sample_results/bop_challenge_2019/
   'result_filenames': [
-    '/relative/path/to/csv/with/results',
+          # '/relative/path/to/csv/with/results',
+    '../../../poet/eval_dir/bop_backbone/poet_ycbv-test.csv',
   ],
 
   # Folder with results to be evaluated.
@@ -117,7 +118,10 @@ for result_filename in p['result_filenames']:
 
   # Name of the result and the dataset.
   result_name = os.path.splitext(os.path.basename(result_filename))[0]
-  dataset = str(result_name.split('_')[1].split('-')[0])
+  try:
+      dataset = str(result_name.split('_')[1].split('-')[0])
+  except:
+      dataset = result_name
 
   # Calculate the average estimation time per image.
   ests = inout.load_bop_results(
