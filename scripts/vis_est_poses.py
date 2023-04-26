@@ -48,7 +48,7 @@ p = {
   # of the format. Example results can be found at:
   # https://bop.felk.cvut.cz/media/data/bop_sample_results/bop_challenge_2019/
   'result_filenames': [
-    '/path/to/csv/with/results',
+      '/home/nils/poet/output_v8_bop/bop_backbone/ycbv.csv'
   ],
 
   # Folder containing the BOP datasets.
@@ -77,6 +77,7 @@ for result_fname in p['result_filenames']:
 
   # Parse info about the method and the dataset from the filename.
   result_name = os.path.splitext(os.path.basename(result_fname))[0]
+  result_name = 'poet_ycbv-train-pbr' if result_name == 'ycbv' else result_name
   result_info = result_name.split('_')
   method = result_info[0]
   dataset_info = result_info[1].split('-')

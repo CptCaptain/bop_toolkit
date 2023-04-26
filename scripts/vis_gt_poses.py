@@ -14,23 +14,27 @@ from bop_toolkit_lib import renderer
 from bop_toolkit_lib import visualization
 
 
+config.output_path = '/home/nils/poet/output_v8_bop/'
 # PARAMETERS.
 ################################################################################
 p = {
   # See dataset_params.py for options.
-  'dataset': 'lm',
+  'dataset': 'ycbv',
 
   # Dataset split. Options: 'train', 'val', 'test'.
-  'dataset_split': 'test',
+  'dataset_split': 'train',
+  # 'dataset_split': 'test',
 
   # Dataset split type. None = default. See dataset_params.py for options.
-  'dataset_split_type': None,
+  'dataset_split_type': 'pbr',
+  # 'dataset_split_type': None,
 
   # File with a list of estimation targets used to determine the set of images
   # for which the GT poses will be visualized. The file is assumed to be stored
   # in the dataset folder. None = all images.
   # 'targets_filename': 'test_targets_bop19.json',
-  'targets_filename': None,
+  # 'targets_filename': None,
+  'targets_filename': '/home/nils/poet/output_v8_bop/poet_targets.json',
 
   # Select ID's of scenes, images and GT poses to be processed.
   # Empty list [] means that all ID's will be used.
@@ -57,7 +61,9 @@ p = {
   'renderer_type': 'vispy',  # Options: 'vispy', 'cpp', 'python'.
 
   # Folder containing the BOP datasets.
-  'datasets_path': config.datasets_path,
+  # 'datasets_path': config.datasets_path,
+  # 'datasets_path': '/home/nils/datasets/bop/output/bop_data/',
+  'datasets_path': '/media/Data1/BOP/ycb-v/',
 
   # Folder for output visualisations.
   'vis_path': os.path.join(config.output_path, 'vis_gt_poses'),
@@ -126,7 +132,6 @@ for obj_id in dp_model['obj_ids']:
 
 scene_ids = dataset_params.get_present_scene_ids(dp_split)
 for scene_id in scene_ids:
-
   # Load scene info and ground-truth poses.
   scene_camera = inout.load_scene_camera(
     dp_split['scene_camera_tpath'].format(scene_id=scene_id))
@@ -135,7 +140,7 @@ for scene_id in scene_ids:
 
   # List of considered images.
   if scene_im_ids is not None:
-    im_ids = scene_im_ids[scene_id]
+    im_ids = scene_im_ids[str(scene_id)]
   else:
     im_ids = sorted(scene_gt.keys())
   if p['im_ids']:
@@ -143,6 +148,7 @@ for scene_id in scene_ids:
 
   # Render the object models in the ground-truth poses in the selected images.
   for im_counter, im_id in enumerate(im_ids):
+    im_id = int(im_id)
     if im_counter % 10 == 0:
       misc.log(
         'Visualizing GT poses - dataset: {}, scene: {}, im: {}/{}'.format(
