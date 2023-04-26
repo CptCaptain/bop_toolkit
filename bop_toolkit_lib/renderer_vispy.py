@@ -399,7 +399,7 @@ class RendererVispy(renderer.Renderer, app.Canvas, metaclass=SingletonArgs):
             ("a_color", np.float32, colors.shape[1]),
             ("a_texcoord", np.float32, 2),
         ]
-        vertices = np.array(list(zip(model["pts"], model["normals"], colors, texture_uv)), vertices_type)
+        vertices = np.array(list(zip(model["pts"], model.get("normals", np.zeros((len(model["pts"]), 3))), colors, texture_uv)), vertices_type)
       else:
         raise ValueError("Unknown shading type.")
 
